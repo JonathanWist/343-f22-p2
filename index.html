@@ -4,12 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="youtube.ico">
+    <link rel="stylesheet" href="css/style.css">
     <title>YouTube Helper</title>
 </head>
 <body>
+    <h1>YouTube Video Helper</h1>
     <form>
         <label for="keyword">Keywords:</label>
         <input type="text" id="keyword" name="keyword">
+        <label for="num-results">How many results?:</label>
+        <input type="number" id="num-results" name="num-results">
+        <select id="filter">
+            <option value="relevance" selected>relevance</option>
+            <option value="date">date</option>
+            <option value="rating">rating</option>
+            <option value="title">title</option>
+            <option value="videoCount">video count</option>
+            <option value="viewCount">view count</option>
+        </select>
+        <input type="submit" id="submit">
     </form>
     <script src="js/script.js"></script>
 </body>
