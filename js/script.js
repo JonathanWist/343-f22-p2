@@ -35,25 +35,14 @@ async function submitFunc(ev) {
         const respJson = await response.json();
         console.log(respJson);
 
-        let videoList = respJson.items;
+        let respList = respJson.items;
         nextPage = respJson.nextPageToken;
-        console.log(videoList);
+        console.log(respList);
         clearResultsElem();
-        const resultElem = document.createElement("div");
-        // window.location.href = `${window.location.href}/${videoList[0]}`
-        // videoList.forEach(async (video, index) => {
-        //     if (video.id.kind == "youtube#video") {
-        //         const videoID = video.id.videoId;
-        //         const ratingResp = await fetch(`https://returnyoutubedislikeapi.com/votes?videoId=${videoID}`);
-        //         const ratingJSON = await ratingResp.json();
-        //         console.log(ratingJSON);
-        //         console.log(`${index} likes:${ratingJSON.likes} dislikes:${ratingJSON.dislikes}`);
-        //         resultElem.append(createVideoElem(video, ratingJSON));
-        //     }
-        // });
-        const ratings = await getRatings(videoList);
+        const ratings = await getRatings(respList);
         console.log(ratings);
-        results.append(resultElem);
+        const resultElems = await createElements(respList, ratings);
+        results.append(...resultElems);
     }
 }
 
@@ -70,6 +59,15 @@ async function getRatings(respList) {
     return ratings;
 } 
 
+async function createElements(response, ratings) {
+    const elements = await Promise.all(
+        response.map((item, index) =>{
+            return createVideoElem(item, ratings[index]);
+        })
+    );
+    return elements;
+}
+
 function createVideoElem(video, ratings) {
     const vidElem = document.createElement("div");
     vidElem.classList.add("video");
@@ -79,15 +77,17 @@ function createVideoElem(video, ratings) {
     const currImg = document.createElement("img");
     currImg.src = video.snippet.thumbnails.high.url;
     vidElem.append(currImg);
-    const viewElem = document.createElement("h3");
-    viewElem.textContent = `Views: ${ratings.viewCount}`;
-    vidElem.append(viewElem);
-    const likeElem = document.createElement("h4");
-    const dislikeElem = document.createElement("h4");
-    likeElem.textContent = `Likes: ${ratings.likes}`;
-    dislikeElem.textContent = `Dislikes: ${ratings.dislikes}`;
-    vidElem.append(likeElem);
-    vidElem.append(dislikeElem);
+    if (ratings != null) {
+        const viewElem = document.createElement("h3");
+        viewElem.textContent = `Views: ${ratings.viewCount}`;
+        vidElem.append(viewElem);
+        const likeElem = document.createElement("h4");
+        const dislikeElem = document.createElement("h4");
+        likeElem.textContent = `Likes: ${ratings.likes}`;
+        dislikeElem.textContent = `Dislikes: ${ratings.dislikes}`;
+        vidElem.append(likeElem);
+        vidElem.append(dislikeElem);
+    }
     return vidElem;
 }
 
@@ -111,19 +111,10 @@ async function nextFunc() {
         const respList = respJson.items;
         clearResultsElem();
         const resultElem = document.createElement("div");
-        // respList.forEach(async (video, index) => {
-        //     if (video.id.kind == "youtube#video") {
-        //         const videoID = video.id.videoId;
-        //         const ratingResp = await fetch(`https://returnyoutubedislikeapi.com/votes?videoId=${videoID}`);
-        //         const ratingJSON = await ratingResp.json();
-        //         console.log(ratingJSON);
-        //         console.log(`${index} likes:${ratingJSON.likes} dislikes:${ratingJSON.dislikes}`);
-        //         resultElem.append(createVideoElem(video, ratingJSON));
-        //     }
-        // });
         const ratings = await getRatings(respList);
         console.log(ratings);
-        results.append(resultElem);
+        const resultElems = await createElements(respList, ratings);
+        results.append(...resultElems);
     }
 }
 
@@ -143,6 +134,7 @@ async function prevFunc() {
         const resultElem = document.createElement("div");
         const ratings = await getRatings(respList);
         console.log(ratings);
-        results.append(resultElem);
+        const resultElems = await createElements(respList, ratings);
+        results.append(...resultElems);
     }
 }
