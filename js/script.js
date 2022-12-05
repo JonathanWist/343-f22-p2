@@ -16,9 +16,6 @@ let prevPage;
 
 const key = 'AIzaSyA6JFCh_bFbNbQM_A7-_YiXqG0fo7BbNHM';
 
-console.log(form);
-console.log(input.value);
-console.log(num_res);
 const results = document.querySelector("#results");
 form.addEventListener('submit', submitFunc);
 nextButton.addEventListener('click', nextFunc);
@@ -61,16 +58,16 @@ async function submitFunc(ev) {
 }
 
 async function getRatings(respList) {
-    return respList.forEach(async (item, index) => {
-        if (item.id.kind == "youtube#video") {
-            const videoID = item.id.videoId;
-            const ratingResp = await fetch(`https://returnyoutubedislikeapi.com/votes?videoId=${videoID}`);
-            const ratingJSON = await ratingResp.json();
-            console.log(ratingJSON);
-            console.log(`${index} likes:${ratingJSON.likes} dislikes:${ratingJSON.dislikes}`);
-            return ratingJSON;
-        }
-    });
+    const ratings = await Promise.all(
+        respList.map((item) => {
+            if (item.id.kind == "youtube#video") {
+                const videoID = item.id.videoId;
+                return fetch(`https://returnyoutubedislikeapi.com/votes?videoId=${videoID}`).then((res) =>
+                res.json().then( (jsonRes) => {return jsonRes}));
+            }
+        })
+    );
+    return ratings;
 } 
 
 function createVideoElem(video, ratings) {
@@ -134,6 +131,7 @@ async function prevFunc() {
     if (prevPage != null) {
         const response = await fetch(`https://www.googleapis.com/youtube/v3/search?pageToken=${prevPage}&part=snippet&order=${filter.value}&maxResults=${num}&&q=${input.value}&key=${key}`);
         const respJson = await response.json();
+        console.log(respJson);
         if (respJson.prevPageToken != null) {
             prevPage = respJson.prevPageToken;
         } else {
@@ -148,19 +146,3 @@ async function prevFunc() {
         results.append(resultElem);
     }
 }
-// for (let i = 1; i < 5; i++) {
-//     const currResponse = await fetch(`https://www.googleapis.com/youtube/v3/search?pageToken=${nextPage}&part=snippet&maxresults=25&q=${input.value}&key=AIzaSyDm1C1asDzsd5U72iWhydu4ked3LLyyO0A`);
-//     const currJson = await currResponse.json();
-//     videoList = currJson.items;
-//     nextPage = currJson.nextPageToken;
-//     console.log(videoList);
-//     videoList.forEach(async (video, index) => {
-    //         if (video.id.kind == "youtube#video") {
-//             const videoID = video.id.videoId;
-//             const ratingResp = await fetch(`https://returnyoutubedislikeapi.com/votes?videoId=${videoID}`);
-//             const ratingJSON = await ratingResp.json();
-//             console.log(ratingJSON);
-//             console.log(`${index} likes:${ratingJSON.likes} dislikes:${ratingJSON.dislikes}`);
-//         }
-//     });
-// }
