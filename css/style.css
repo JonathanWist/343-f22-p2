@@ -1,3 +1,17 @@
 .dynamic-content {
     display:none;
 }
+
+h1 {
+    background-image: url("../images/youtube_logo.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    padding-left: 55px;
+}
+
+body {
+    background: rgb(226, 226, 226);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}

@@ -1,14 +1,19 @@
 // Authors: Jonathan Wist and Alden Geipel
 
+// Definitions of all different elements on the HTML page.
 const form = document.querySelector("form");
 
 const input = document.querySelector("#keyword");
 
+// Number of results per-page.
 const num_res = document.querySelector("#num-results");
 let num;
 
+// Different filters that could be applied to the search.
 const filter = document.querySelector("#filter");
 
+// Buttons to the next and previous pages of results, as well as
+// variables to hold the locations of those pages.
 const prevButton = document.querySelector("#prev");
 const nextButton = document.querySelector("#next");
 let nextPage;
@@ -26,11 +31,9 @@ async function submitFunc(ev) {
     num = num_res.value;
     if (num > 20) {
         num = 20;
-    } else if (num < 0) {
-        num = 0;
     }
 
-    if (input.value != "") {
+    if (input.value != "" || num < 0) {
         const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&order=${filter.value}&maxResults=${num}&q=${input.value}&key=${key}`);
         const respJson = await response.json();
         console.log(respJson);
@@ -68,14 +71,23 @@ async function createElements(response, ratings) {
     return elements;
 }
 
-function createVideoElem(video, ratings) {
+function createVideoElem(item, ratings) {
     const vidElem = document.createElement("div");
-    vidElem.classList.add("video");
+    if (item.id.kind == "youtube#channel") {
+        vidElem.id = item.id.channelId;
+        vidElem.classList.add("channel");
+    } else if (item.id.kind == "youtube#video") {
+        vidElem.id = item.id.videoId;
+        vidElem.classList.add("video");
+    }
     const title = document.createElement("h2");
-    title.textContent = video.snippet.title;
+    // const tempElem = document.createElement("div");
+    // tempElem.innerHTML = video.snippet.title;
+    // title.textContent = tempElem.textContent;
+    title.innerHTML = item.snippet.title;
     vidElem.append(title);
     const currImg = document.createElement("img");
-    currImg.src = video.snippet.thumbnails.high.url;
+    currImg.src = item.snippet.thumbnails.high.url;
     vidElem.append(currImg);
     if (ratings != null) {
         const viewElem = document.createElement("h3");
