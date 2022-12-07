@@ -21,6 +21,7 @@ let prevPage;
 
 const key = 'AIzaSyA6JFCh_bFbNbQM_A7-_YiXqG0fo7BbNHM';
 
+// Results element and listeners for different user actions.
 const results = document.querySelector("#results");
 form.addEventListener('submit', submitFunc);
 nextButton.addEventListener('click', nextFunc);
@@ -33,7 +34,7 @@ async function submitFunc(ev) {
         num = 20;
     }
 
-    if (input.value != "" || num < 0) {
+    if (input.value != "" && num > 0) {
         const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&order=${filter.value}&maxResults=${num}&q=${input.value}&key=${key}`);
         const respJson = await response.json();
         console.log(respJson);
