@@ -1,26 +1,5 @@
 // Authors: Jonathan Wist and Alden Geipel
 
-const videoToCard = ({
-    prefix,
-    number,
-    title,
-    url,
-    desc,
-    prereqs,
-    credits,
-  }) => {
-    const prereqLinks = prereqs
-      .map((prereq) => `<a href="#" class="card-link">${prereq}</a>`)
-      .join();
-    const infoTemplate = `  <div class="card m-2" style="width: 25rem;">
-                                <div class="card-body">
-                                    <p class="card-text">This is my favorite supplemental learning resource for grammar. Unfortunately, this is one of the few resources that I don’t think you can get around paying for. It goes over every grammar point covered in every lesson and asks for you to repeat what she says in Japanese and answer questions in Japanese. It also has quizzes that test your knowledge.</p>
-                                    <a href="http://grammarvideoforgenki.com/index-e.html" class="card-link">Link to Official Genki grammar videos</a>
-                                </div>
-                            </div>`;
-    return infoTemplate;
-  };
-
 // Definitions of all different elements on the HTML page.
 const form = document.querySelector("form");
 
@@ -177,8 +156,9 @@ function createVideoElem(item, ratings) {
     // return vidElem;
     let title = item.snippet.title;
     let src = item.snippet.thumbnails.high.url;
-    let viewCount, likes, dislikes;
+    let uploader, viewCount, likes, dislikes;
     if (ratings != null) {
+        uploader = item.snippet.channelTitle;
         viewCount = ratings.viewCount
         likes = ratings.likes
         dislikes = ratings.dislikes
@@ -201,6 +181,7 @@ function createVideoElem(item, ratings) {
                                 <div class="card-body">
                                     <h5 class="card-title">${title}</h5>
                                     <img class="card-img" src="${src}">
+                                    <p class="card-text">Uploader: ${uploader}</p>
                                     <p class="card-text">View count: ${viewCount}</p>
                                     <p class="card-text">Likes: ${likes}</p>
                                     <p class="card-text">Dislikes: ${dislikes}</p>
@@ -209,7 +190,7 @@ function createVideoElem(item, ratings) {
     } else {
         videoCard = `  <div class="card text-white bg-dark mb-3" style="max-width: 50rem;">
                                 <div class="card-body">
-                                    <h5 class="card-title">${title}</h5>
+                                    <h5 class="card-title">Channel: ${title}</h5>
                                     <img class="card-img" src="${src}">
                                 </div>
                             </div>`;
@@ -280,7 +261,8 @@ async function nextFunc() {
         const ratings = await getRatings(respList);
         console.log(ratings);
         const resultElems = await createElements(respList, ratings);
-        results.append(...resultElems);
+        // results.append(...resultElems);
+        results.innerHTML = resultElems.join("");
     }
 }
 
@@ -308,6 +290,7 @@ async function prevFunc() {
         const ratings = await getRatings(respList);
         console.log(ratings);
         const resultElems = await createElements(respList, ratings);
-        results.append(...resultElems);
+        // results.append(...resultElems);
+        results.innerHTML = resultElems.join("");
     }
 }
