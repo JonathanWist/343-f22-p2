@@ -1,5 +1,26 @@
 // Authors: Jonathan Wist and Alden Geipel
 
+const videoToCard = ({
+    prefix,
+    number,
+    title,
+    url,
+    desc,
+    prereqs,
+    credits,
+  }) => {
+    const prereqLinks = prereqs
+      .map((prereq) => `<a href="#" class="card-link">${prereq}</a>`)
+      .join();
+    const infoTemplate = `  <div class="card m-2" style="width: 25rem;">
+                                <div class="card-body">
+                                    <p class="card-text">This is my favorite supplemental learning resource for grammar. Unfortunately, this is one of the few resources that I don’t think you can get around paying for. It goes over every grammar point covered in every lesson and asks for you to repeat what she says in Japanese and answer questions in Japanese. It also has quizzes that test your knowledge.</p>
+                                    <a href="http://grammarvideoforgenki.com/index-e.html" class="card-link">Link to Official Genki grammar videos</a>
+                                </div>
+                            </div>`;
+    return infoTemplate;
+  };
+
 // Definitions of all different elements on the HTML page.
 const form = document.querySelector("form");
 
