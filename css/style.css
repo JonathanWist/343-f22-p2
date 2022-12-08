@@ -7,6 +7,19 @@ h1 {
     background-size: contain;
     background-repeat: no-repeat;
     padding-left: 55px;
+    font-size: 3rem;
+}
+
+@media screen and (max-width: 530px) {
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    h1 {
+        font-size: 1.5rem;
+    }
 }
 
 body {
@@ -16,9 +29,9 @@ body {
     align-items: flex-start;
 }
 
-/* #results{
+#results{
     display: flex;
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
-} */
+}
