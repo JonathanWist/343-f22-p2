@@ -5,10 +5,51 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="authors" content="Jonathan Wist and Alden Geipel">
+    <link rel="icon" type="image/x-icon" href="images/youtube.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
     <title>CS 343 Project 2: Youtube Helper</title>
 </head>
 <body>
-    <p>LINK TO DEPLOYED APP</p>
-    <p>WHAT DOES APP DO AND HOW SATISFY REQUIREMENTS</p>
+    <h1>Project 2 Report</h1>
+    <a href="https://jonathanwist.github.io/343-f22-p2/">Link to deployed app!</a>
+    <dl>
+        <dt>App Functions:</dt>
+        <dd> - This app takes input from the user of keywords or video/channel links and is able to retrieve<br>
+           search results from YouTube's servers and give information on those results. This app also takes<br>
+           those results and runs them through the ReturnYouTubeDislikes API, which gives ratings information<br>
+           for the video results and displays those as well. In the search section, there are multiple modifiers<br>
+           that the user can use, such as modifying the amount of results that appear per page, and how results<br>
+           are ordered using the dropdown menu of options (the default is relevance). The user can also flip through<br>
+           multiple pages of results using the next and previous page buttons located at the bottom of the app.</dd><br>
+
+        <dt>How does this app satisfy the criteria of this assignment?</dt>
+        <dd>
+            <ol>
+                <li>
+                    Our app is deployed both on GitHub and on stu <br>
+                    (GitHub url is at the top, stu url:<a href="http://w3stu.cs.jmu.edu/wistjp/343f22/CS343-p2/">http://w3stu.cs.jmu.edu/wistjp/343f22/CS343-p2/</a>).
+                </li>
+                <li>
+                    Our app is responsive and changes size and alignment based upon the size of the screen viewing it.
+                </li>
+                <li>
+                    Our app makes use of the YouTube api to get video and channel search results and the ReturnYouTubeDislikes API<br>
+                    to get ratings information for those videos.
+                </li>
+                <li>
+                    Our app makes use of search as the user inputs a query, which is modifiable to search based on<br>
+                    certain criteria, such as view count, ratings, alphabetically based on title, etc. This then displays<br>
+                    the results of the search as the results from the APIs.
+                </li>
+                <li>
+                    Our app displays results based on the query entered by the user.
+                </li>
+                <li>
+                    The user can filter the results using the modifiers from the dropdown menu in the app.
+                </li>
+            </ol>
+        </dd>
+    </dl>
 </body>
 </html>

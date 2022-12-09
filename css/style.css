@@ -6,7 +6,7 @@ h1 {
     background-image: url("../images/youtube_logo.jpg");
     background-size: contain;
     background-repeat: no-repeat;
-    padding-left: 55px;
+    padding-left: 60px;
     font-size: 3rem;
 }
 
@@ -17,7 +17,7 @@ body {
     align-items: center;
     padding-left: 55px;
     padding-right: 55px;
-    min-width: 170px;
+    min-width: 180px;
 }
 
 @media screen and (max-width: 638px) and (min-width: 481px) {
@@ -49,10 +49,3 @@ body {
         padding-right: 0px;
     }
 }
-
-
-/* #results{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-} */
