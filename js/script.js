@@ -66,8 +66,8 @@ async function submitFunc(ev) {
 
         // Create the HTML elements to be added to the page.
         const resultElems = await createElements(respList, ratings);
-        // results.append(...resultElems);
-        results.innerHTML = resultElems.join("");
+        results.append(...resultElems);
+        // results.innerHTML = resultElems.join("");
     }
 }
 
@@ -106,54 +106,6 @@ async function createElements(response, ratings) {
 // @param item: individual search result from YouTube's API
 // @param ratings: rating data for that item
 function createVideoElem(item, ratings) {
-    // const vidElem = document.createElement("div");
-    // // Determine whether the element is a YouTube channel or video and store
-    // // some identification data.
-    // if (item.id.kind == "youtube#channel") {
-    //     vidElem.id = item.id.channelId;
-    //     vidElem.classList.add("channel");
-    // } else if (item.id.kind == "youtube#video") {
-    //     vidElem.id = item.id.videoId;
-    //     vidElem.classList.add("video");
-    // }
-
-    // // Store data for the title of the result.
-    // const title = document.createElement("h2");
-    // // const tempElem = document.createElement("div");
-    // // tempElem.innerHTML = video.snippet.title;
-    // // title.textContent = tempElem.textContent;
-    // title.innerHTML = item.snippet.title;
-    // vidElem.append(title);
-
-    // // Store data for the image of the result
-    // const currImg = document.createElement("img");
-    // // Dynamically changes which image is displayed based upon the resolution
-    // // of the display device.
-    // if (window.matchMedia("(max-width: 319px)").matches) {
-    //     currImg.src = item.snippet.thumbnails.default.url;
-    // }
-    // else if (window.matchMedia("(max-width: 500px)").matches || 
-    //     (item.id.kind == "youtube#channel" && window.matchMedia("(max-width: 800px)").matches)) {
-    //     currImg.src = item.snippet.thumbnails.medium.url;
-    // } else {
-    //     currImg.src = item.snippet.thumbnails.high.url;
-    // }
-    // vidElem.append(currImg);
-
-    // // Only applies ratings data if the element is a YouTube video.
-    // if (ratings != null) {
-    //     const viewElem = document.createElement("h3");
-    //     viewElem.textContent = `Views: ${ratings.viewCount}`;
-    //     vidElem.append(viewElem);
-
-    //     const likeElem = document.createElement("h4");
-    //     likeElem.textContent = `Likes: ${ratings.likes}`;
-    //     vidElem.append(likeElem);
-    //     const dislikeElem = document.createElement("h4");
-    //     dislikeElem.textContent = `Dislikes: ${ratings.dislikes}`;
-    //     vidElem.append(dislikeElem);
-    // }
-    // return vidElem;
     let title = item.snippet.title;
     let src = item.snippet.thumbnails.high.url;
     let uploader, viewCount, likes, dislikes;
@@ -164,6 +116,17 @@ function createVideoElem(item, ratings) {
         dislikes = ratings.dislikes
     }
 
+    const videoCard = document.createElement("div");
+    videoCard.classList.add("card", "text-white", "bg-dark", "mb-3");
+    videoCard.style.maxWidth = "800px";
+    const cardBody = document.createElement("div");
+    cardBody.classList.add("card-body");
+    const cardTitle = document.createElement("h5");
+    cardTitle.classList.add("card-title");
+    cardTitle.innerHTML = title;
+    cardBody.append(cardTitle);
+    const cardImg = document.createElement("img");
+    cardImg.classList.add("card-img");
     if (window.matchMedia("(max-width: 319px)").matches) {
         src = item.snippet.thumbnails.default.url;
     }
@@ -171,30 +134,48 @@ function createVideoElem(item, ratings) {
         (item.id.kind == "youtube#channel" && window.matchMedia("(max-width: 800px)").matches)) {
         src = item.snippet.thumbnails.medium.url;
     }
-
-    let videoCard;
+    cardImg.src = src;
+    cardBody.append(cardImg);
+    const cardUpload = document.createElement("p");
+    const cardViews = document.createElement("p");
+    const cardLikes = document.createElement("p");
+    const cardDislikes = document.createElement("p");
     if (item.id.kind == "youtube#video") {
-        console.log(item);
-        console.log(ratings);
-        console.log(dislikes);
-        videoCard = `  <div class="card text-white bg-dark mb-3" style="max-width: 50rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title">${title}</h5>
-                                    <img class="card-img" src="${src}">
-                                    <p class="card-text">Uploader: ${uploader}</p>
-                                    <p class="card-text">View count: ${viewCount}</p>
-                                    <p class="card-text">Likes: ${likes}</p>
-                                    <p class="card-text">Dislikes: ${dislikes}</p>
-                                </div>
-                            </div>`;
-    } else {
-        videoCard = `  <div class="card text-white bg-dark mb-3" style="max-width: 50rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Channel: ${title}</h5>
-                                    <img class="card-img" src="${src}">
-                                </div>
-                            </div>`;
+        cardUpload.classList.add("card-text");
+        cardUpload.innerHTML = `Uploader: ${uploader}`;
+        cardBody.append(cardUpload);
+        cardViews.classList.add("card-text");
+        cardViews.innerHTML = `View Count: ${viewCount}`;
+        cardBody.append(cardViews);
+        cardLikes.classList.add("card-text");
+        cardLikes.innerHTML = `Likes: ${likes}`;
+        cardBody.append(cardLikes);
+        cardDislikes.classList.add("card-text");
+        cardDislikes.innerHTML = `Dislikes: ${dislikes}`;
+        cardBody.append(cardDislikes);
     }
+
+    // let videoCard;
+    // if (item.id.kind == "youtube#video") {
+    //     videoCard = `  <div class="card text-white bg-dark mb-3" style="max-width: 50rem;">
+    //                             <div class="card-body">
+    //                                 <h5 class="card-title">${title}</h5>
+    //                                 <img class="card-img" src="${src}">
+    //                                 <p class="card-text">Uploader: ${uploader}</p>
+    //                                 <p class="card-text">View count: ${viewCount}</p>
+    //                                 <p class="card-text">Likes: ${likes}</p>
+    //                                 <p class="card-text">Dislikes: ${dislikes}</p>
+    //                             </div>
+    //                         </div>`;
+    // } else {
+    //     videoCard = `  <div class="card text-white bg-dark mb-3" style="max-width: 50rem;">
+    //                             <div class="card-body">
+    //                                 <h5 class="card-title">Channel: ${title}</h5>
+    //                                 <img class="card-img" src="${src}">
+    //                             </div>
+    //                         </div>`;
+    // }
+    videoCard.append(cardBody);
     return videoCard;
 }
 
@@ -209,33 +190,33 @@ function clearResultsElem() {
 // dynamically alter them and use the other images of different resolutions.
 function updateImages() {
     if (respList != null && results.childNodes != null) {
-        // Array.from(results.childNodes).forEach((child, index) => {
-        //     const img = child.childNodes.item(1);
-            // if (window.matchMedia("(max-width: 319px)").matches) {
-            //     img.src = respList[index].snippet.thumbnails.default.url;
-            // }
-            // else if (window.matchMedia("(max-width: 500px)").matches ||
-            //     (respList[index].id.kind == "youtube#channel" && window.matchMedia("(max-width: 800px)").matches)) {
-            //     img.src = respList[index].snippet.thumbnails.medium.url;
-            // } else {
-            //     img.src = respList[index].snippet.thumbnails.high.url;
-            // }
-        // });
-        console.log(results.childNodes);
-        console.log(results.childNodes[1].childNodes[1].childNodes[3]);
-        for (let i = 1; i < results.childNodes.length; i += 2) {
-            const img = results.childNodes[i].childNodes[1].childNodes[3];
+        Array.from(results.childNodes).forEach((item, index) => {
+            const img = item.childNodes[0].childNodes[1];
             if (window.matchMedia("(max-width: 319px)").matches) {
-                img.src = respList[Math.floor(i/2)].snippet.thumbnails.default.url;
+                img.src = respList[index].snippet.thumbnails.default.url;
             }
             else if (window.matchMedia("(max-width: 500px)").matches ||
-                (respList[Math.floor(i/2)].id.kind == "youtube#channel" && window.matchMedia("(max-width: 800px)").matches)) {
-                img.src = respList[Math.floor(i/2)].snippet.thumbnails.medium.url;
+                (respList[index].id.kind == "youtube#channel" && window.matchMedia("(max-width: 800px)").matches)) {
+                img.src = respList[index].snippet.thumbnails.medium.url;
             } else {
-                img.src = respList[Math.floor(i/2)].snippet.thumbnails.high.url;
+                img.src = respList[index].snippet.thumbnails.high.url;
             }
-        }
+        });
     }
+    // if (respList != null && results.childNodes != null) {
+    //     for (let i = 1; i < results.childNodes.length; i += 2) {
+    //         const img = results.childNodes[i].childNodes[1].childNodes[3];
+            // if (window.matchMedia("(max-width: 319px)").matches) {
+            //     img.src = respList[Math.floor(i/2)].snippet.thumbnails.default.url;
+            // }
+            // else if (window.matchMedia("(max-width: 500px)").matches ||
+            //     (respList[Math.floor(i/2)].id.kind == "youtube#channel" && window.matchMedia("(max-width: 800px)").matches)) {
+            //     img.src = respList[Math.floor(i/2)].snippet.thumbnails.medium.url;
+            // } else {
+            //     img.src = respList[Math.floor(i/2)].snippet.thumbnails.high.url;
+            // }
+    //     }
+    // }
 }
 
 // Function to execute when the 'next page' button is pressed. Fetches
@@ -261,8 +242,8 @@ async function nextFunc() {
         const ratings = await getRatings(respList);
         console.log(ratings);
         const resultElems = await createElements(respList, ratings);
-        // results.append(...resultElems);
-        results.innerHTML = resultElems.join("");
+        results.append(...resultElems);
+        // results.innerHTML = resultElems.join("");
     }
 }
 
@@ -290,7 +271,7 @@ async function prevFunc() {
         const ratings = await getRatings(respList);
         console.log(ratings);
         const resultElems = await createElements(respList, ratings);
-        // results.append(...resultElems);
-        results.innerHTML = resultElems.join("");
+        results.append(...resultElems);
+        // results.innerHTML = resultElems.join("");
     }
 }
